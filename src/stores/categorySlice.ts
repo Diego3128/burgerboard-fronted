@@ -12,7 +12,7 @@ export type CategorySliceType = {
 };
 
 export const categorySlice: StateCreator<CategorySliceType> = (set) => ({
-  loadingCategories: false,
+  loadingCategories: true,
   errorCategories: null,
   categories: [],
   activeCategoryId: null,
@@ -21,7 +21,7 @@ export const categorySlice: StateCreator<CategorySliceType> = (set) => ({
   },
   getCategories: async (signal: AbortSignal) => {
     try {
-      set({ errorCategories: null, loadingCategories: true });
+      set({ errorCategories: null });
       const data = await fetchCategories(signal);
       if (data) {
         set(() => ({ categories: data }));

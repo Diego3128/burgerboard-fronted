@@ -1,6 +1,72 @@
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { axiosClient } from "../../config/axios";
+import { AxiosError } from "axios";
+import { parse, safeParse } from "valibot";
+import { RegisterUserErrorSchema, RegisterUserSuccessSchema } from "../../schemas";
+import FormErrorMessages from "../../components/FormErrorMessages";
+import SubmitButton from "../../components/SubmitButton";
+
+// TODO MOVE TO TYPES FOLDER 
+
+type RegisterType = {
+  name: string,
+  email: string,
+  password: string,
+  password_confirmation: string
+}
+
+type RegisterErrorsType = {
+  name?: string[],
+  email?: string[],
+  password?: string[],
+}
 
 export const Register = () => {
+
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState<RegisterType>({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: ""
+  });
+
+  const [formErrors, setFormErrors] = useState<RegisterErrorsType>({});
+
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+
+  }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      setLoading(true);
+      const response = await axiosClient.post('/api/register', JSON.stringify(formData));
+      // validate reponse with valibot
+      const result = parse(RegisterUserSuccessSchema, response.data);
+      console.log(result)
+
+    } catch (error) {
+      // validate erroros
+      if (error instanceof AxiosError) {
+        const errorParse = safeParse(RegisterUserErrorSchema, error.response?.data);
+        if (errorParse.success) {
+          return setFormErrors(errorParse.output.errors);
+        }
+      }
+      console.log(error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div>
       <h2 className="text-center font-bold text-gray-700 text-2xl mb-10">
@@ -11,7 +77,8 @@ export const Register = () => {
       </p>
       <form
         className=" max-w-xl mx-auto md:mx-0 md:w-sm rounded-lg border-2 p-5 border-gray-300 space-y-5"
-        action=""
+        onSubmit={handleSubmit}
+        noValidate
       >
         <div>
           <label
@@ -21,12 +88,16 @@ export const Register = () => {
             Name
           </label>
           <input
+            onChange={handleChange}
+            value={formData.name}
             id="name"
             name="name"
             placeholder="Your name"
             type="text"
             className="w-full p-2.5 text-gray-700 font-semibold rounded-lg border border-gray-300 outline-none focus:border-gray-500 "
           />
+          <FormErrorMessages errors={formErrors.name} />
+
         </div>
         <div>
           <label
@@ -36,12 +107,16 @@ export const Register = () => {
             Email
           </label>
           <input
+            onChange={handleChange}
+            value={formData.email}
             id="email"
             name="email"
             placeholder="Your email"
             className="w-full p-2.5 text-gray-700 font-semibold rounded-lg border border-gray-300 outline-none focus:border-gray-500 "
             type="email"
           />
+          <FormErrorMessages errors={formErrors.email} />
+
         </div>
         <div>
           <label
@@ -51,6 +126,8 @@ export const Register = () => {
             Password
           </label>
           <input
+            onChange={handleChange}
+            value={formData.password}
             id="password"
             name="password"
             placeholder="Create a password"
@@ -66,20 +143,23 @@ export const Register = () => {
             Repeat your password
           </label>
           <input
+            onChange={handleChange}
+            value={formData.password_confirmation}
             id="password_confirmation"
             name="password_confirmation"
             placeholder="Repeat the password"
-            className="w-full p-2.5 text-gray-700 font-semibold rounded-lg border border-gray-300 outline-none focus:border-gray-500 "
+            className={`w-full p-2.5 text-gray-700 font-semibold rounded-lg border  outline-none focus:border-gray-500`}
             type="password"
           />
+
+          {/* errors */}
+          <FormErrorMessages errors={formErrors.password} />
+
         </div>
 
-        <button
-          className="bg-yellow-400 text-gray-900 rounded-xl p-5 text-center block w-full font-black mt-7 disabled:bg-yellow-300 hover:bg-yellow-300 focus:bg-yellow-300 outline-none cursor-pointer disabled:cursor-not-allowed"
-          type="submit"
-        >
+        <SubmitButton loading={loading} loadingText="Creating account...">
           Create account
-        </button>
+        </SubmitButton>
 
         <nav>
           <p className="text-center text-pretty text-gray-700 font-semibold">

@@ -14,12 +14,11 @@ export const Category = ({ category }: CategoryProps) => {
   return (
     <button
       onClick={() => setActiveCategoryId(category.id)}
-      className={` animate-popIn px-2.5 py-4 w-full flex gap-3 justify-around items-center group bg-yellow-300 border-b-2 border-b-gray-400 hover:opacity-85 transition-opacity duration-1000 cursor-pointer ${
-        activeCategory ? "bg-yellow-500" : ""
-      }`}
+      className={` animate-popIn px-2.5 py-4 w-full flex gap-3 justify-around items-center group bg-yellow-300 border-b-2 border-b-gray-400 hover:opacity-85 transition-opacity duration-1000 cursor-pointer ${activeCategory ? "bg-yellow-500" : ""
+        }`}
     >
       <img
-        src={`/img/icons/icono_${category.icon}.svg`}
+        src={category.icon}
         alt={`${category.name} image`}
         className="size-12 sm:size-16 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500"
       />

@@ -21,8 +21,8 @@ export const SideBar = () => {
   return (
     <aside className="flex-1/4 pb-20  border-b-2 border-b-gray-400 md:border-r-2 md:border-r-gray-400">
       <img
-        className="w-10/12 mx-auto max-w-40 my-10"
-        src="/img/icons/logo.svg"
+        className="w-10/12 mx-auto max-w-32 my-5"
+        src="/logo.svg"
         alt="burgerboard logo"
       />
       <div className="min-h-[50vh] relative">

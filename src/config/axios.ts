@@ -5,5 +5,8 @@ export const axiosClient = axios.create({
   timeout: 6000,
   headers: {
     "Content-Type": "application/json",
+    Accept: "application/json",
+    "X-Requested-Width": "XMLHttpRequest",
   },
+  withCredentials: true,
 });
