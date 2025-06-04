@@ -4,8 +4,12 @@ import { Summary } from "../components/Summary";
 import { Modal } from "../components/Modal";
 import { ProductDetails } from "../components/ProductDetails";
 import { ToastContainer } from "react-toastify";
+import { useAuth } from "../hooks/auth/useAuth";
 
 export const Layout = () => {
+
+  useAuth('auth', '/auth/login');
+
   return (
     <div className="md:flex">
       <SideBar />

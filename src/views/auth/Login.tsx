@@ -16,7 +16,7 @@ export type LoginErrorsType = {
 
 export const Login = () => {
   // problem when using a custom hook:
-  // every time Login redners useAuth is executed.
+  // every time Login renders useAuth is executed.
   // solutions? use zustand and create an authentication store?
   const { login, loading } = useAuth("guest", "/");
 

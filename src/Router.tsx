@@ -9,6 +9,7 @@ export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* protected routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
         </Route>

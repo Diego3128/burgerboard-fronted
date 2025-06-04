@@ -1,40 +1,30 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { axiosClient } from "../../config/axios";
-import { AxiosError } from "axios";
-import { parse, safeParse } from "valibot";
-import { RegisterUserErrorSchema, RegisterUserSuccessSchema } from "../../schemas";
 import FormErrorMessages from "../../components/FormErrorMessages";
 import SubmitButton from "../../components/SubmitButton";
+import { useAuth } from "../../hooks/auth/useAuth";
 
 // TODO MOVE TO TYPES FOLDER 
-
-type RegisterType = {
+export type RegisterType = {
   name: string,
   email: string,
   password: string,
   password_confirmation: string
 }
-
-type RegisterErrorsType = {
+export type RegisterErrorsType = {
   name?: string[],
   email?: string[],
   password?: string[],
 }
-
 export const Register = () => {
-
-  const [loading, setLoading] = useState(false);
-
+  const { loading, register } = useAuth("guest", "/");
   const [formData, setFormData] = useState<RegisterType>({
     name: "",
     email: "",
     password: "",
     password_confirmation: ""
   });
-
   const [formErrors, setFormErrors] = useState<RegisterErrorsType>({});
-
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,29 +32,10 @@ export const Register = () => {
       ...prev,
       [name]: value
     }))
-
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    try {
-      setLoading(true);
-      const response = await axiosClient.post('/api/register', JSON.stringify(formData));
-      // validate reponse with valibot
-      const result = parse(RegisterUserSuccessSchema, response.data);
-      console.log(result)
-
-    } catch (error) {
-      // validate erroros
-      if (error instanceof AxiosError) {
-        const errorParse = safeParse(RegisterUserErrorSchema, error.response?.data);
-        if (errorParse.success) {
-          return setFormErrors(errorParse.output.errors);
-        }
-      }
-      console.log(error);
-    } finally {
-      setLoading(false)
-    }
+    register(formData, setFormData, setFormErrors);
   }
 
   return (
@@ -134,6 +105,8 @@ export const Register = () => {
             className="w-full p-2.5 text-gray-700 font-semibold rounded-lg border border-gray-300 outline-none focus:border-gray-500 "
             type="password"
           />
+          {/* errors */}
+          <FormErrorMessages errors={formErrors.password} />
         </div>
         <div>
           <label
@@ -151,7 +124,6 @@ export const Register = () => {
             className={`w-full p-2.5 text-gray-700 font-semibold rounded-lg border  outline-none focus:border-gray-500`}
             type="password"
           />
-
           {/* errors */}
           <FormErrorMessages errors={formErrors.password} />
 
