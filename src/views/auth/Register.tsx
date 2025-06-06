@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormErrorMessages from "../../components/FormErrorMessages";
 import SubmitButton from "../../components/SubmitButton";
-import { useAuth } from "../../hooks/auth/useAuth";
+import { useAuthStore } from "../../stores/auth/useAuthStore";
 
 // TODO MOVE TO TYPES FOLDER 
 export type RegisterType = {
@@ -17,7 +17,9 @@ export type RegisterErrorsType = {
   password?: string[],
 }
 export const Register = () => {
-  const { loading, register } = useAuth("guest", "/");
+  const register = useAuthStore((state) => state.register);
+  const loading = useAuthStore((state) => state.loading);
+
   const [formData, setFormData] = useState<RegisterType>({
     name: "",
     email: "",
@@ -25,6 +27,8 @@ export const Register = () => {
     password_confirmation: ""
   });
   const [formErrors, setFormErrors] = useState<RegisterErrorsType>({});
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,8 +39,10 @@ export const Register = () => {
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    register(formData, setFormData, setFormErrors);
+    register(formData, setFormData, setFormErrors, navigate);
   }
+
+  console.log('register rendered');
 
   return (
     <div>

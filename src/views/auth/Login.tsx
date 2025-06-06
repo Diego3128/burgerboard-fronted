@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormErrorMessages from "../../components/FormErrorMessages";
 import SubmitButton from "../../components/SubmitButton";
-import { useAuth } from "../../hooks/auth/useAuth";
+import { useAuthStore } from "../../stores/auth/useAuthStore";
 
 // TODO: MOVE TO TYPES FOLDER 
 export type LoginType = {
@@ -15,10 +15,9 @@ export type LoginErrorsType = {
 }
 
 export const Login = () => {
-  // problem when using a custom hook:
-  // every time Login renders useAuth is executed.
-  // solutions? use zustand and create an authentication store?
-  const { login, loading } = useAuth("guest", "/");
+  const loading = useAuthStore((state) => state.loading);
+  const login = useAuthStore((state) => state.login);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<LoginType>({
     email: "",
@@ -26,7 +25,7 @@ export const Login = () => {
   });
 
   const [formErrors, setFormErrors] = useState<LoginErrorsType>({});
-  const [generalError, setGeneralError] = useState<null | string>(null);
+  const [authError, setAuthError] = useState<null | string>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,7 +36,7 @@ export const Login = () => {
   }
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await login(formData, setFormData, setGeneralError, setFormErrors);
+    await login(formData, setFormData, setFormErrors, navigate, setAuthError)
   }
 
   return (
@@ -55,8 +54,8 @@ export const Login = () => {
         className=" max-w-xl mx-auto md:mx-0 md:w-sm rounded-lg border-2 p-5 border-gray-300 mb-20 md:mb-0 space-y-5"
         action=""
       >
-        {generalError && (
-          <p className="animate-popIn bg-red-200 text-red-600 p-3 text-lg mb-6 rounded-lg text-center">{generalError}</p>
+        {authError && (
+          <p className="animate-popIn bg-red-200 text-red-600 p-3 text-lg mb-6 rounded-lg text-center">{authError}</p>
         )}
 
         <div>

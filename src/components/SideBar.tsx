@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppStore } from "../stores/useAppstore";
 import { Category } from "./Category";
 import { Loader } from "./Loader";
-import { useAuth } from "../hooks/auth/useAuth";
+import { Logout } from "./Logout";
 
 export const SideBar = () => {
   const categories = useAppStore((state) => state.categories);
@@ -18,7 +18,6 @@ export const SideBar = () => {
 
   }, [getCategories]);
 
-  const { logout, loading } = useAuth("auth", "/auth/login");
 
   console.log('sidebar rendered')
 
@@ -37,12 +36,7 @@ export const SideBar = () => {
         }
       </div>
       <div>
-        <button
-          onClick={logout}
-          disabled={loading}
-          className={`mt-10 w-10/12 mx-auto block p-6 outline-none bg-red-500 hover:opacity-80 disabled:opacity-50 transition-opacity duration-500 text-white rounded-xl  text-center font-bold`}>
-          Cancel Order and Log Out
-        </button>
+        <Logout />
       </div>
     </aside>
   );

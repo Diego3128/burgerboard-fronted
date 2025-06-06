@@ -5,6 +5,6 @@ import { AppRouter } from "./Router";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-      <AppRouter />
+    <AppRouter />
   </StrictMode>
 );

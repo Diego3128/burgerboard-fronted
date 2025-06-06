@@ -41,6 +41,13 @@ export const RegisterUserSuccessSchema = valibot.object({
   success: valibot.boolean(),
   message: valibot.string(),
   token: valibot.string(),
+  user: valibot.object({
+    id: valibot.number(),
+    name: valibot.string(),
+    email: valibot.string(),
+    created_at: valibot.string(),
+    updated_at: valibot.string(),
+  }),
 });
 
 /////////////// USER LOGIN /////////////////////
@@ -54,19 +61,20 @@ export const LoginUserErrorSchema = valibot.object({
   message: valibot.optional(valibot.string()),
 });
 
-// Success response after user registration
-export const LoginUserSuccessSchema = valibot.object({
-  success: valibot.boolean(),
-  message: valibot.string(),
-  token: valibot.string(),
-});
-
 // user schema for the endpoint /api/user
 export const UserResponseSchema = valibot.object({
   id: valibot.number(),
   name: valibot.string(),
   email: valibot.string(),
-  email_verified_at: valibot.nullable(valibot.string()),
+  email_verified_at: valibot.optional(valibot.nullable(valibot.string())),
   created_at: valibot.string(),
   updated_at: valibot.string(),
+});
+
+// Success response after user registration
+export const LoginUserSuccessSchema = valibot.object({
+  success: valibot.boolean(),
+  message: valibot.string(),
+  token: valibot.string(),
+  user: UserResponseSchema,
 });
