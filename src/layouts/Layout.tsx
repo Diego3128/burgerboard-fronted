@@ -27,10 +27,7 @@ export const Layout = () => {
         autoClose={5000}
         hideProgressBar={true}
         newestOnTop={false}
-        closeOnClick={true}
         rtl={false}
-        pauseOnFocusLoss
-        pauseOnHover
         theme="light"
       />
     </div>

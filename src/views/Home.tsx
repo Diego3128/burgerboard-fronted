@@ -10,12 +10,19 @@ import { Product } from "../components/Product";
 
 export const Home = () => {
   const categoryId = useAppStore((state) => state.activeCategoryId);
+  const setProducts = useAppStore((state) => state.setProducts);
 
   const fetcher = async (): Promise<ProductType[]> => {
     const response = await axiosClient("/api/products");
     // validate with valibot
     const result = safeParse(ProductSchemaResponse, response.data);
-    return result.success ? result.output.data : []
+    if (result.success) {
+      setProducts(result.output.data)
+      return result.output.data;
+    } else {
+      setProducts([]);
+      return [];
+    }
   };
 
   const { data, isLoading } = useSWR(
@@ -26,12 +33,20 @@ export const Home = () => {
     }
   );
 
-  const displayedProducts: ProductType[] = useMemo(() => {
-    if (isLoading || !data) return [];
-    // filter products by the categoryId and availability
-    if (!categoryId) return data.filter(p => p.available); // return all with no category selected
-    return data.filter(p => p.category_id === categoryId && p.available);
+  console.log('rendering home')
 
+  const displayedProducts: ProductType[] = useMemo(() => {
+    if (isLoading || !data) {
+      return [];
+    }
+    // return all with no category selected
+    if (!categoryId) {
+      const products = data.filter(p => p.available);
+      return products;
+    }
+    // filter products by the categoryId and availability
+    const products = data.filter(p => p.category_id === categoryId && p.available);
+    return products;
   }, [data, isLoading, categoryId])
 
   // console.log("home rendered");

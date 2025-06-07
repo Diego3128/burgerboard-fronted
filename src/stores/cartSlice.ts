@@ -2,11 +2,15 @@ import type { StateCreator } from "zustand";
 import type { Product, ProductInfo } from "../types";
 import type { ProductSliceType } from "./productSlice";
 import { toast } from "react-toastify";
+import { axiosClient } from "../config/axios";
+import type { NavigateFunction } from "react-router-dom";
 
 export type CartSliceType = {
   order: ProductInfo[];
   activeProduct: Product | null;
   total: number;
+  placingOrder: boolean;
+  orderCreated: boolean;
   calcTotal: () => void;
   setActiveProduct: (productId: Product["id"]) => void;
   addToCart: (product: ProductInfo) => void;
@@ -14,6 +18,10 @@ export type CartSliceType = {
   isModalOpen: boolean;
   closeModal: () => void;
   openModal: () => void;
+  placeOrder: (
+    logout: (navigate: NavigateFunction) => Promise<void>,
+    navigate: NavigateFunction
+  ) => Promise<void>;
 };
 
 export const cartSlice: StateCreator<
@@ -27,6 +35,8 @@ export const cartSlice: StateCreator<
     isModalOpen: false,
     activeProduct: null,
     total: 0,
+    placingOrder: false,
+    orderCreated: false,
     closeModal: () => {
       set(() => ({ isModalOpen: false, activeProduct: null }));
     },
@@ -82,6 +92,60 @@ export const cartSlice: StateCreator<
       }, 0);
 
       set(() => ({ total }));
+    },
+    placeOrder: async (logout, navigate) => {
+      if (!get().order.length) {
+        toast.error("Your order is invalid");
+        return;
+      }
+      try {
+        set(() => ({ placingOrder: true }));
+        const token = localStorage.getItem("AUTH-TOKEN");
+        if (!token) {
+          throw new Error("No token available");
+        }
+        const reponse = await axiosClient.post(
+          "/api/orders",
+          {
+            products: get().order.map((p) => {
+              return { id: p.id, quantity: p.amount };
+            }),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (reponse.status === 200) {
+          set(() => ({ orderCreated: true }));
+          toast.success("Order created successfully", {
+            className: "border border-gray-600/70",
+          });
+
+          toast.info(
+            "You will be automatically logged out in a few seconds...",
+            {
+              className: "border border-gray-600/70",
+              hideProgressBar: false,
+              autoClose: 7000,
+              // onClose: () => {
+              //   logout(navigate);
+              // },
+            }
+          );
+          setTimeout(() => logout(navigate), 7000);
+        } else {
+          throw new Error("Order not created.");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong creating the order.", {
+          className: "border border-gray-600/70",
+        });
+      } finally {
+        set(() => ({ placingOrder: false, order: [] }));
+      }
     },
   };
 };

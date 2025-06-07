@@ -184,7 +184,10 @@ export const useAuthStore = create<AuthState>()(
           }, 300);
         }
       },
-      reset: () => set({ user: null, token: null, loading: false }),
+      reset: () => {
+        localStorage.removeItem("AUTH-TOKEN");
+        set({ user: null, token: null, loading: false });
+      },
     }),
     {
       name: "burgerboard-auth",

@@ -26,7 +26,7 @@ export const ProductDetails = () => {
         }
       }
     }
-  }, [activeProduct]);
+  }, [activeProduct, orderProducts]);
 
   const increment = () => {
     if (amount >= MAX) return;
@@ -39,10 +39,10 @@ export const ProductDetails = () => {
 
   return activeProduct ? (
     <div className="mx-auto mt-12 w-10/12 max-w-4xl bg-gradient-to-bl from-gray-100 via-yellow-50 to-gray-300 p-4 rounded-xl sm-480:flex sm-480:gap-3 sm-480:justify-between">
-      <div className="sm-480:flex-2/5 ">
+      <div className="sm-480:flex-2/5 sm-480:flex sm-480:justify-center sm-480:items-center ">
         <img
-          className="rounded-xl animate-glow duration-700 mx-auto "
-          src={`/img/${activeProduct.image}.jpg`}
+          className="rounded-xl animate-glow duration-700 mx-auto animate-popIn "
+          src={activeProduct.image}
           alt={`${activeProduct.name} image`}
         />
       </div>
@@ -51,6 +51,11 @@ export const ProductDetails = () => {
         <p className="font-bold text-gray-700 text-balance text-lg sm:text-xl mt-4 sm-480:mt-0">
           {activeProduct.name}
         </p>
+
+        <p className="font-bold text-gray-700 text-balance  sm:text-lg mt-4 sm-480:mt-0">
+          {activeProduct.description}
+        </p>
+
         <p className=" w-fit mt-6 rounded-2xl p-2 text-gray-100 bg-green-400 text-center -top-1 -left-2.5   transition-transform duration-700 md:text-lg">
           {formatCurrency(activeProduct.price)}
         </p>

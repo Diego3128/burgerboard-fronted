@@ -21,7 +21,7 @@ export const ProductSummary = ({ product }: ProductSummaryProps) => {
     <div className="p-2 pr-10 flex gap-2 border-b border-gray-400 text-gray-700 text-xs xs:text-sm relative animate-slide-in-right">
       <div className="flex-1/6">
         <img
-          src={`/img/${product.image}.jpg`}
+          src={product.image}
           alt={`${product.name} image`}
           className="size-24 object-contain rounded-lg"
         />

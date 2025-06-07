@@ -12,9 +12,14 @@ export const SideBar = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    getCategories(controller.signal);
+    const timeoutId = setTimeout(() => {
+      getCategories(controller.signal);
+    }, 300)
 
-    return () => controller.abort();
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+    }
 
   }, [getCategories]);
 
