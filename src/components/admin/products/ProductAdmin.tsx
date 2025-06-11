@@ -42,24 +42,37 @@ export const ProductAdmin = ({ product }: ProductType) => {
             </div>
             <div className="relative">
                 {/* product options*/}
-                <div className="absolute -top-4 left-0 w-full flex items-center justify-end z-20">
+                <div className="absolute -top-8 left-0 w-full flex items-center justify-between z-20">
 
-                    <button
-                        disabled={toggling}
-                        onClick={handleToggle}
-                        title={available ? 'pause product' : 'activate product'}
-                        className={`${available ? 'bg-gray-300' : 'bg-yellow-300'} rounded-lg p-1.5 text-sm group-hover:-translate-y-2 group-hover:-translate-x-1 transition-transform duration-300 hover:contrast-150 cursor-pointer hover:scale-110 animate-popIn disabled:cursor-not-allowed`}
-                    >
-                        {available ? (
+                    {/* availability */}
+                    <p className={`rounded-2xl p-2 text-gray-100 font-semibold ${available ? 'bg-green-500' : 'bg-gray-500'} text-center group-hover:-translate-y-2 group-hover:-translate-x-1 transition-transform duration-300  lg:text-lg`}>{available ? 'Active' : 'Paused'}</p>
+
+                    <div className="flex gap-1.5">
+                        <button
+                            title="edit product"
+                            className="bg-gray-600 rounded-lg p-1.5 text-sm group-hover:-translate-y-2 group-hover:-translate-x-1 transition-transform duration-300 hover:contrast-150 cursor-pointer hover:scale-110 animate-popIn disabled:cursor-not-allowed">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                             </svg>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-                            </svg>
-                        )}
-                    </button>
+                        </button>
+
+                        <button
+                            disabled={toggling}
+                            onClick={handleToggle}
+                            title={available ? 'pause product' : 'activate product'}
+                            className={`${available ? 'bg-gray-300' : 'bg-yellow-300'} rounded-lg p-1.5 text-sm group-hover:-translate-y-2 group-hover:-translate-x-1 transition-transform duration-300 hover:contrast-150 cursor-pointer hover:scale-110 animate-popIn disabled:cursor-not-allowed`}
+                        >
+                            {available ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
                 </div>
                 {/* product name */}
                 <p className="w-[95%] mx-auto rounded-2xl p-4 text-white bg-indigo-700 -mt-6 z-10 relative font-semibold text-center shadow-sm shadow-indigo-900 group-hover:scale-105 group-hover:translate-y-2 transition-transform duration-700 text-xs sm:text-sm text-balance">

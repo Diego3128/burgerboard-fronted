@@ -1,54 +1,100 @@
-# React + TypeScript + Vite
+# 🍔 BurgerBoard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**BurgerBoard** is a fullstack application built with **React** and **Laravel Sanctum**.
+It serves as a restaurant kiosk system where users can create personal accounts, log in, and place food orders.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- User registration and authentication with Laravel Sanctum
+- Personal user accounts to place and manage orders
+- Admin panel to manage product availability and order status
+- Role-based access control
+- Real-time feedback using toasts
+- Reponse validation with Valibot
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🛠️ Tech Stack
+
+### Backend
+
+- Laravel 12
+- Sanctum for API authentication
+
+➡️ [API Repository](https://github.com/Diego3128/burgerboard.git)
+
+### Frontend
+
+- React 19
+- Tailwind CSS 4
+- Zustand for state management
+- React Router DOM 7
+- SWR for data fetching and caching
+- Axios for HTTP requests
+- React Toastify for notifications
+- Valibot for reponse validation
+
+---
+
+## 🗋 Project Structure
+
+```bash
+src/
+|-- components/
+|-- config/
+|-- data/
+|-- helpers/
+|-- hooks/
+|-- layouts/
+|-- schemas/
+|-- services/
+|-- stores/
+|-- types/
+|-- views/
+|-- index.css
+|-- main.tsx
+|-- Router.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📸 Screenshots
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### Login
+
+![Login](./screenshots/1-login.png)
+
+### Create Order
+
+![Create Order](./screenshots/2-create-order.png)
+
+### Admin Panel - Orders
+
+![Admin Orders](./screenshots/3-adminpanel-order.png)
+
+### Admin Panel - Products
+
+![Admin Products](./screenshots/4-adminpanel-products.png)
+
+---
+
+## 🙌 Getting Started
+
+1. Clone the repository
+2. Set up the Laravel backend with Sanctum authentication
+3. Install frontend dependencies
+
+```bash
+npm install
+npm run dev
 ```
+
+Make sure to configure environment variables for both frontend and backend.
+
+---
+
+## 🛌 License
+
+This project is licensed under the MIT License.
