@@ -7,15 +7,28 @@ import { ProductSchemaResponse } from "../schemas";
 import type { Product as ProductType } from "../types";
 import { Loader } from "../components/Loader";
 import { Product } from "../components/Product";
+import { useAuthStore } from "../stores/auth/useAuthStore";
 
 export const Home = () => {
   const categoryId = useAppStore((state) => state.activeCategoryId);
+
+  const token = useAuthStore((state) => state.token);
   const setProducts = useAppStore((state) => state.setProducts);
 
   const fetcher = async (): Promise<ProductType[]> => {
-    const response = await axiosClient("/api/products");
+    if (!token) {
+      throw new Error('token not available');
+    }
+
+    const response = await axiosClient("/api/products", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
     // validate with valibot
     const result = safeParse(ProductSchemaResponse, response.data);
+    console.log(result)
     if (result.success) {
       setProducts(result.output.data)
       return result.output.data;

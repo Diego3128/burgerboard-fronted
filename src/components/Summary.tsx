@@ -1,4 +1,4 @@
-import { useEffect, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { formatCurrency } from "../helpers";
 import { useAppStore } from "../stores/useAppstore";
 import { ProductSummary } from "./ProductSummary";
@@ -11,11 +11,11 @@ export const Summary = () => {
   const calcTotal = useAppStore((state) => state.calcTotal);
   const placeOrder = useAppStore((state) => state.placeOrder);
   const placingOrder = useAppStore((state) => state.placingOrder);
-  const orderCreated = useAppStore((state) => state.orderCreated);
 
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
+  const [orderMessage, setOrderMessage] = useState<null | string>(null);
   // no need for use memo due to zustand render
   const emptyOrder = orderElements.length === 0;
 
@@ -26,7 +26,7 @@ export const Summary = () => {
 
   const handleOrderSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await placeOrder(logout, navigate);
+    await placeOrder(logout, navigate, setOrderMessage);
   }
   return (
     <>
@@ -60,7 +60,7 @@ export const Summary = () => {
           </div>
         ) : (
           <div className="absolute w-full h-full inset-0 flex items-center justify-center font-bold text-xl text-gray-700">
-            {orderCreated ? (
+            {orderMessage ? (
               <p className="text-white bg-green-400 p-3 rounded-lg  w-fit text-balance text-center">Your order was successfully created.</p>
             ) : (
               <p className="px-2 text-balance text-center">Your order is empty.</p>

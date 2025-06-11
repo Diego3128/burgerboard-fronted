@@ -65,6 +65,7 @@ export const useAuthStore = create<AuthState>()(
             navigate("/");
           }
         } catch (error) {
+          console.log(error);
           // validate form errors
           if (error instanceof AxiosError) {
             const errorParse = safeParse(
@@ -186,7 +187,13 @@ export const useAuthStore = create<AuthState>()(
       },
       reset: () => {
         localStorage.removeItem("AUTH-TOKEN");
-        set({ user: null, token: null, loading: false });
+        // set defaults
+        set(() => ({
+          user: null,
+          token: null,
+          loading: false,
+          gettingUser: true,
+        }));
       },
     }),
     {

@@ -4,13 +4,13 @@ import type { ProductSliceType } from "./productSlice";
 import { toast } from "react-toastify";
 import { axiosClient } from "../config/axios";
 import type { NavigateFunction } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
 
 export type CartSliceType = {
   order: ProductInfo[];
   activeProduct: Product | null;
   total: number;
   placingOrder: boolean;
-  orderCreated: boolean;
   calcTotal: () => void;
   setActiveProduct: (productId: Product["id"]) => void;
   addToCart: (product: ProductInfo) => void;
@@ -20,7 +20,8 @@ export type CartSliceType = {
   openModal: () => void;
   placeOrder: (
     logout: (navigate: NavigateFunction) => Promise<void>,
-    navigate: NavigateFunction
+    navigate: NavigateFunction,
+    setMessage: Dispatch<SetStateAction<string | null>>
   ) => Promise<void>;
 };
 
@@ -36,7 +37,6 @@ export const cartSlice: StateCreator<
     activeProduct: null,
     total: 0,
     placingOrder: false,
-    orderCreated: false,
     closeModal: () => {
       set(() => ({ isModalOpen: false, activeProduct: null }));
     },
@@ -93,7 +93,7 @@ export const cartSlice: StateCreator<
 
       set(() => ({ total }));
     },
-    placeOrder: async (logout, navigate) => {
+    placeOrder: async (logout, navigate, setMessage) => {
       if (!get().order.length) {
         toast.error("Your order is invalid");
         return;
@@ -118,7 +118,7 @@ export const cartSlice: StateCreator<
           }
         );
         if (reponse.status === 200) {
-          set(() => ({ orderCreated: true }));
+          setMessage("Order created successfully");
           toast.success("Order created successfully", {
             className: "border border-gray-600/70",
           });

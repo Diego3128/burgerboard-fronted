@@ -8,9 +8,11 @@ type SubmitButtonProps = {
     className?: string;
     variant?: "primary" | "secondary";
     type?: "submit" | "button";
+    handleClick?: () => void;
 };
 
 const SubmitButton = ({
+    handleClick,
     children,
     loading = false,
     loadingText = 'Sending',
@@ -30,6 +32,7 @@ const SubmitButton = ({
 
     return (
         <button
+            onClick={() => handleClick?.()}
             type={type}
             disabled={disabled || loading}
             className={`${baseStyles} ${variants[variant]} ${disabled || loading ? "cursor-not-allowed opacity-65" : "cursor-pointer"
